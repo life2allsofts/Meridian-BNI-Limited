@@ -18,16 +18,13 @@
       box-sizing: border-box;
     }
     
-    /* A5 container */
     .receipt-container {
-      width: 148mm; /* A5 width */
-      height: 210mm; /* A5 height */
-      background: white;
-      padding: 15mm;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 148mm;
       margin: 0 auto;
-      box-sizing: border-box;
-      position: relative;
+      padding: 15mm;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     
     /* Content styles */
@@ -107,33 +104,42 @@
       background-color: #333;
     }
 
-    /* Print-specific styles */
+    /* Consolidated Print-specific styles */
     @media print {
       body {
-        background: none;
-        padding: 0;
-      }
-      .receipt-container {
-        box-shadow: none;
-        padding: 0;
-        margin: 0;
-        width: 148mm;
-        height: 210mm;
-      }
-      @page {
-        size: A5;
-        margin: 15mm;
-      }
-      body {
+        background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: auto;
+        height: auto;
         transform: scale(1);
         transform-origin: top left;
       }
+      
+      .receipt-container {
+        width: 148mm !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 5mm !important;
+        box-shadow: none !important;
+        position: relative !important;
+        overflow: hidden !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+      }
+      
+      @page {
+        size: A5;
+        margin: 10mm !important;
+      }
+      
       .print-button,
       #signature {
-        display: none;
+        display: none !important;
       }
+      
       #signature-preview {
-        display: block;
+        display: block !important;
       }
     }
 
@@ -145,7 +151,7 @@
       .receipt-container {
         width: 100%;
         height: auto;
-        min-height: 210mm;
+        min-height: auto;
       }
     }
   </style>
@@ -205,7 +211,7 @@
     <div class="field">
       <label for="signature">Authorized Signature:</label>
       <input type="file" name="signature" id="signature" accept="image/*" onchange="previewSignature(event)">
-      <img id="signature-preview" alt=".............">
+      <img id="signature-preview" alt="Signature Preview">
     </div>
 
     <div class="print-button">
@@ -233,5 +239,4 @@
     document.getElementById('date').value = new Date().toLocaleDateString();
   </script>
 </body>
-
 </html>
