@@ -186,6 +186,12 @@
         white-space: pre-wrap !important;
       }
     }
+       @media print and (max-width: 600px) {
+  .receipt-container {
+    transform: scale(0.95);       /* shrink slightly so it fits */
+    transform-origin: top left;   /* scale from top-left */
+  }
+}
 
     /* Mobile responsiveness */
     @media screen and (max-width: 600px) {
@@ -298,3 +304,4 @@
   </script>
 </body>
 </html>
+
