@@ -68,6 +68,8 @@
       font-weight: bold;
       margin-bottom: 2px;
     }
+    
+    /* Standard single-line input */
     .field input[type="text"] {
       width: 100%;
       padding: 5px;
@@ -75,20 +77,45 @@
       border: 1px solid #ddd;
       border-radius: 3px;
     }
-    .field input[type="file"] {
-      display: block;
-      margin-top: 4px;
-      font-size: 12px;
+    
+    /* Multi-line textarea fields */
+    .field textarea {
+      width: 100%;
+      padding: 5px;
+      font-size: 13px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      resize: none;
+      min-height: 40px;
+      line-height: 1.3;
+      font-family: Arial, sans-serif;
+      overflow-y: auto;
     }
+    
+    /* Signature container */
+    .signature-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    
+    #signature {
+      flex: 1;
+      max-width: 200px;
+    }
+    
     #signature-preview {
-      margin-top: 4px;
       max-width: 120px;
-      max-height: 40px;
+      height: auto;
       display: none;
       border: 1px solid #ccc;
+      object-fit: contain;
     }
+    
     .print-button {
-      margin-top: 15px;
+      margin-top: 25px;
       text-align: center;
     }
     .print-button button {
@@ -112,8 +139,6 @@
         margin: 0 !important;
         width: auto;
         height: auto;
-        transform: scale(1);
-        transform-origin: top left;
       }
       
       .receipt-container {
@@ -124,8 +149,8 @@
         box-shadow: none !important;
         position: relative !important;
         overflow: hidden !important;
-        page-break-after: avoid !important;
         page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
       
       @page {
@@ -139,7 +164,26 @@
       }
       
       #signature-preview {
+      margin-top: 4px;
+      max-width: 120px;
+      max-height: 25px;
+      display: none;
+      border: 1px solid #ccc;
+    }
+
+      
+      .signature-container {
         display: block !important;
+        page-break-inside: avoid !important;
+        page-break-before: avoid !important;
+        break-inside: avoid !important;
+        break-before: avoid-page !important;
+      }
+      
+      /* Ensure textareas print properly */
+      textarea {
+        border: 1px solid #ddd !important;
+        white-space: pre-wrap !important;
       }
     }
 
@@ -152,6 +196,14 @@
         width: 100%;
         height: auto;
         min-height: auto;
+      }
+      .signature-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      #signature {
+        max-width: 100%;
       }
     }
   </style>
@@ -175,7 +227,7 @@
 
     <div class="field">
       <label for="received_from">Received from:</label>
-      <input type="text" name="received_from" id="received_from">
+      <textarea name="received_from" id="received_from" rows="2"></textarea>
     </div>
 
     <div class="field">
@@ -185,7 +237,7 @@
 
     <div class="field">
       <label for="being">Being:</label>
-      <input type="text" name="being" id="being">
+      <textarea name="being" id="being" rows="2"></textarea>
     </div>
 
     <div class="field">
@@ -208,10 +260,13 @@
       <input type="text" name="date" id="date">
     </div>
 
-    <div class="field">
-      <label for="signature">Authorized Signature:</label>
-      <input type="file" name="signature" id="signature" accept="image/*" onchange="previewSignature(event)">
-      <img id="signature-preview" alt="Signature Preview">
+    <!-- Signature field -->
+    <div class="field signature-block">
+      <label>Authorized Signature:</label>
+      <div class="signature-container">
+        <input type="file" name="signature" id="signature" accept="image/*" onchange="previewSignature(event)">
+        <img id="signature-preview" alt="Signature Preview">
+      </div>
     </div>
 
     <div class="print-button">
@@ -237,6 +292,9 @@
 
     // Auto-fill today's date
     document.getElementById('date').value = new Date().toLocaleDateString();
+    
+    // Optional: Auto-focus first field
+    document.getElementById('receipt_no').focus();
   </script>
 </body>
 </html>
